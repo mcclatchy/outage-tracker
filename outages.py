@@ -2,13 +2,15 @@ import os
 import sys
 import time
 from datetime import datetime
-import requests
 import json
-import boto3
 import xml.etree.ElementTree as ET
+import requests
+import boto3
 
 
 def add_to_s3(data, state_postal):
+    """ connect and upload json to S3 """
+
     ## connect to S3
     s3 = boto3.resource('s3')
 
@@ -19,7 +21,7 @@ def add_to_s3(data, state_postal):
     s3.Object('mccdata', filename_s3).put(Body=data)
 
     ## cdn domain for file url
-    domain = 'https://d1at6jy1u029jl.cloudfront.net'
+    domain = 'os.environ['CDN_DOMAIN']'
 
     ## url of the uploaded file
     url = domain + '/' + filename_s3
@@ -28,6 +30,8 @@ def add_to_s3(data, state_postal):
 
 
 def fpl_api():
+    """ grab and reformat data from FPL """
+
     state_postal = "FL"
 
     #### GRAB DATA ####
@@ -70,6 +74,8 @@ def fpl_api():
 
 
 def gpc_api():
+    """ grab and reformat data for GPC """
+
     state_postal = "GA"
 
     #### FIND DIRECTORY ####
